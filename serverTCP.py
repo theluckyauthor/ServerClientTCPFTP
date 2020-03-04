@@ -2,7 +2,7 @@ import socket
 import datetime
 
 host = socket.gethostname()
-port = 5000
+port = 8000
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.bind((host, port))
 s.listen(3)
