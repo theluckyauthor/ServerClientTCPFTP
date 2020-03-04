@@ -14,9 +14,9 @@ try:
         client, ip = s.accept()
         time = datetime.datetime.now()
         print ('New connection from IP:', ip, 'Date/time:', time)
-        data = client.recv(4096)
-        text = 'you are connected to the socket ' + ip[0] + ':' + str(port) 
-        client.send( text )
+        data = client.recv(1024)
+        print(data)
+
         # with file('test_file_server.txt', 'w+') as f:
             # f.write(data)
         client.close()
