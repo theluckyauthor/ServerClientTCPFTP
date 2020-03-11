@@ -25,4 +25,4 @@ print('Enviado al servidor')
 
 #Enviar archivo a clientes
 
-s.close()
+#s.close()

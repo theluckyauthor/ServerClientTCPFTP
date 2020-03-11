@@ -46,7 +46,6 @@ try:
     ips=[]
     tiempo= []
     while clientesConectados < numeroClientes:
-        s.bind((host, port))
         client, ip = s.accept()
         time = datetime.datetime.now()
         clientes.append(client)
@@ -54,7 +53,7 @@ try:
         tiempo.append(time)
         print ('New connection from IP:', ip, 'Date/time:', time)
         client.send('OK'.encode())       
-        confirmacion = s.recv(1024).decode()
+        confirmacion = s.recv(1024).decode("ascii")
         if(confirmacion == ('Listo para recibir el archivo')):
             print('Cliente detectado')
             clientesConectados+=1
