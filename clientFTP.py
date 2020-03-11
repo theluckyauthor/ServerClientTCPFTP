@@ -1,7 +1,7 @@
 import socket
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-host = socket.gethostname()
+host = "54.162.114.197"
 port = 8000
 
 s.connect((host, port))
@@ -15,12 +15,12 @@ print('Conectado al socket '+host+':'+str(port))
     # s.send(data)
     # print 'OK'
 data = s.recv(1024).decode()
-if(data.equals('OK')):
+if(data == 'OK'):
     print('Servidor detectado')
 else:
     raise Exception('No se obtuvo confirmación del servidor')
 listo = 'Listo para recibir el archivo'
-s.send(listo)
+s.send(str.encode(listo))
 print('Enviado al servidor')
 
 #Enviar archivo a clientes
