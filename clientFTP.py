@@ -23,7 +23,7 @@ listo = 'Listo para recibir el archivo'
 s.send(str.encode(listo))
 print('Enviado al servidor')
 while True:
-    print('esperando')
+
 
 arhivo = s.recv(1024).decode()
     
