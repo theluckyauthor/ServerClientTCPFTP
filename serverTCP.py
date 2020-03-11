@@ -53,7 +53,7 @@ try:
         tiempo.append(time)
         print ('New connection from IP:', ip, 'Date/time:', time)
         client.send('OK'.encode())       
-        confirmacion = s.recv(1024).decode("ascii")
+        confirmacion = s.recv(1024).decode()
         if(confirmacion == ('Listo para recibir el archivo')):
             print('Cliente detectado')
             clientesConectados+=1

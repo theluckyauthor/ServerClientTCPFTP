@@ -23,6 +23,8 @@ listo = 'Listo para recibir el archivo'
 s.send(str.encode(listo))
 print('Enviado al servidor')
 
+arhivo = s.recv(1024).decode()
+    
 #Enviar archivo a clientes
 
 #s.close()
