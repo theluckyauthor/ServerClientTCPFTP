@@ -36,8 +36,6 @@ host = socket.gethostname()
 port = 8000
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.bind((host, port))
-s.listen(3)
-
 print ('Server listening on port ' + str(port) + '...')
 
 try:
@@ -53,7 +51,7 @@ try:
         tiempo.append(time)
         print ('New connection from IP:', ip, 'Date/time:', time)
         client.send('OK'.encode())       
-        confirmacion = s.recv(1024).decode()
+        confirmacion = client.recv(1024).decode("ascii")
         if(confirmacion == ('Listo para recibir el archivo')):
             print('Cliente detectado')
             clientesConectados+=1
