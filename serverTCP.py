@@ -46,7 +46,7 @@ try:
     ips=[]
     tiempo= []
     while clientesConectados < numeroClientes:
-        s.bind(('54.162.114.197', 8000))
+        s.bind((host, port))
         client, ip = s.accept()
         time = datetime.datetime.now()
         clientes.append(client)
