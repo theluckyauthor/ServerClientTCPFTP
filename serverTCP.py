@@ -1,5 +1,6 @@
 import socket
 import datetime
+import sys
 def preguntarPorNumeroClientes():
     while True:
         try:
@@ -45,13 +46,20 @@ try:
     ips=[]
     tiempo= []
     while clientesConectados < numeroClientes:
-        clientesConectados+=1
         client, ip = s.accept()
         time = datetime.datetime.now()
         clientes.append(client)
         ips.append(ip)
         tiempo.append(time)
         print ('New connection from IP:', ip, 'Date/time:', time)
-        client.send('OK')
+        client.send('OK'.encode())
+        
+        confirmacion = s.recv(1024).decode()
+        if(confirmacion.equals('Listo para recibir el archivo')):
+            print('Cliente detectado')
+            clientesConectados+=1
+        else:
+            raise Exception('No se obtuvo confirmación del cliente')
+        
 except KeyboardInterrupt as e:
     print (e)
