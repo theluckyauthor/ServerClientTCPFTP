@@ -1,31 +1,24 @@
-import socket
+import socket                   # Import socket module
 
-s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-host = "54.162.114.197"
-port = 8000
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)             # Create a socket object
+host = "54.162.114.197"  #Ip address that the TCPServer  is there
+port = 50000                     # Reserve a port for your service every new transfer wants a new port or you must wait.
 
 s.connect((host, port))
-print('Conectado al socket '+host+':'+str(port))
-#a = b'Hello socket'
-#s.sendall(a)
-#print('Sending data to socket', a)
-# with open('test_file.txt', 'rU') as f:
-    # data = f.read(1024)
-    # print 'Sending file...',
-    # s.send(data)
-    # print 'OK'
-data = s.recv(1024).decode()
-if(data == 'OK'):
-    print('Servidor detectado')
-else:
-    raise Exception('No se obtuvo confirmación del servidor')
-listo = 'Listo para recibir el archivo'
-s.send(str.encode(listo))
-print('Enviado al servidor')
-while True:
-    pass
-arhivo = s.recv(1024).decode()
+s.send("Hello server!".encode())
 
-#Enviar archivo a clientes
+with open('received_file', 'wb') as f:
+    print ('file opened')
+    while True:
+        print('receiving data...')
+        data = s.recv(1024)
+        print('data=%s', (data))
+        if not data:
+            break
+        # write data to a file
+        f.write(data)
 
-#s.close()
+f.close()
+print('Successfully get the file')
+s.close()
+print('connection closed')

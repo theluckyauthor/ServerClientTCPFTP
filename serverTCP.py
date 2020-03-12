@@ -32,7 +32,7 @@ def preguntarPorTamañoArchivo():
 numeroClientes = preguntarPorNumeroClientes()
 archivo = preguntarPorTamañoArchivo()
 
-host = socket.gethostname()
+host = "54.162.114.197"
 port = 8000
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.bind((host, port))
