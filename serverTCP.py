@@ -1,62 +1,30 @@
-import socket
-import datetime
-import sys
-def preguntarPorNumeroClientes():
-    while True:
-        try:
-            value = int(input('Escriba el número de clientes a esperar'))
-        except ValueError:
-            print('Tiene que ser un número menor o igual a 25')
-            continue
-        if value < 0 or value > 25:
-            print('Tiene que ser un número positivo menor o igual a 25')
-            continue
-        else:
-            break
-    return value
 
-def preguntarPorTamañoArchivo():
-    while True:
-        try:
-            value = int(input('Escriba el tamaño del archivo para descargar (100 o 250)'))
-        except ValueError:
-            print('Tiene que ser 100 o 250')
-            continue
-        if value != 100 and value !=250:
-            print('Tiene que ser 100 o 250')
-            continue
-        else:
-            break
-    return value
+import socket                   # Import socket module
 
-numeroClientes = preguntarPorNumeroClientes()
-archivo = preguntarPorTamañoArchivo()
+port = 50000                    # Reserve a port for your service every new transfer wants a new port or you must wait.
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)             # Create a socket object
+host = "54.162.114.197"   # Get local machine name
+s.bind((host, port))            # Bind to the port
+s.listen(5)                     # Now wait for client connection.
 
-host = "54.162.114.197"
-port = 8000
-s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-s.bind((host, port))
-print ('Server listening on port ' + str(port) + '...')
+print ('Server listening....')
 
-try:
-    clientesConectados = 0
-    clientes = []
-    ips=[]
-    tiempo= []
-    while clientesConectados < numeroClientes:
-        client, ip = s.accept()
-        time = datetime.datetime.now()
-        clientes.append(client)
-        ips.append(ip)
-        tiempo.append(time)
-        print ('New connection from IP:', ip, 'Date/time:', time)
-        client.send('OK'.encode())       
-        confirmacion = client.recv(1024).decode("ascii")
-        if(confirmacion == ('Listo para recibir el archivo')):
-            print('Cliente detectado')
-            clientesConectados+=1
-        else:
-            raise Exception('No se obtuvo confirmación del cliente')
-        
-except KeyboardInterrupt as e:
-    print (e)
+
+while True:
+    conn, addr = s.accept()     # Establish connection with client.
+    print ('Got connection from', addr)
+    data = conn.recv(1024)
+    print('Server received', repr(data))
+
+    filename='archivos/archivo1.txt' #In the same folder or path is this file running must the file you want to tranfser to be
+    f = open(filename,'rb')
+    l = f.read(1024)
+    while (l):
+       conn.send(l)
+       print('Sent ',repr(l))
+       l = f.read(1024)
+    f.close()
+
+    print('Done sending')
+    conn.send('Thank you for connecting'.encode())
+    conn.close()
