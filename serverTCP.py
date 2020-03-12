@@ -1,7 +1,7 @@
 
 import socket                   # Import socket module
 
-port = 50000                    # Reserve a port for your service every new transfer wants a new port or you must wait.
+port = 8000                    # Reserve a port for your service every new transfer wants a new port or you must wait.
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)             # Create a socket object
 host = "54.162.114.197"   # Get local machine name
 s.bind((host, port))            # Bind to the port
