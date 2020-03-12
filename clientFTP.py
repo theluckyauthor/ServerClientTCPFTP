@@ -5,20 +5,20 @@ host = "54.162.114.197"  #Ip address that the TCPServer  is there
 port = 8000                     # Reserve a port for your service every new transfer wants a new port or you must wait.
 
 s.connect((host, port))
-s.send("Hello server!".encode())
+s.send("Cliente: Hello server!".encode())
 
 with open('received_file', 'wb') as f:
-    print ('file opened')
+    print ('Cliente: file opened')
     while True:
-        print('receiving data...')
+        print('Cliente: receiving data from server')
         data = s.recv(1024)
-        print('data=%s', (data))
+        print('Servidor: data=%s', (data))
         if not data:
             break
         # write data to a file
         f.write(data)
 
 f.close()
-print('Successfully get the file')
+print('Client: Successfully get the file')
 s.close()
-print('connection closed')
+print('Client: connection closed')
