@@ -1,9 +1,28 @@
 
 import socket                   # Import socket module
 
+newFile = ""
+while True:
+    selectedFile = input('Select a file size (100 or 250): ')
+    if selectedFile == "100":
+        newFile = "./archivos/100.txt"
+        break
+    elif selectedFile == "250":
+        newFile = "./archivos/100.txt"
+        break
+
+pool = 0
+while True:
+    selectedPool = int(input('Select number of people to send the file (1): '))
+    if selectedPool > 0:
+        pool = selectedPool
+        break
+
+print(pool)
+print(newFile)
 port = 8001                    # Reserve a port for your service every new transfer wants a new port or you must wait.
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)             # Create a socket object
-host = socket.gethostname()   # Get local machine name
+host = "localhost"     #socket.gethostname()   # Get local machine name
 s.bind((host, port))            # Bind to the port
 s.listen(5)                     # Now wait for client connection.
 

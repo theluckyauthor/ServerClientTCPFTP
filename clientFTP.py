@@ -1,7 +1,7 @@
 import socket                   # Import socket module
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)             # Create a socket object
-host = "54.162.114.197"  #Ip address that the TCPServer  is there
+host = "localhost"         #"54.162.114.197"  #Ip address that the TCPServer  is there
 port = 8001                     # Reserve a port for your service every new transfer wants a new port or you must wait.
 
 s.connect((host, port))
