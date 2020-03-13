@@ -5,10 +5,10 @@ newFile = ''
 while True:
     selectedFile = input('Select a file size (100 or 250): ')
     if selectedFile == '100':
-        newFile = './archivos/100.txt'
+        newFile = './archivos/archivo2.txt'
         break
     elif selectedFile == '250':
-        newFile = './archivos/100.txt'
+        newFile = './archivos/archivo3.txt'
         break
 
 pool = 0
