@@ -89,11 +89,8 @@ while True:
         
 #4. Realizar la transferencia de archivos a los clientes definidos en la prueba. 
         with s:
-            sbuf = bufferTCP.Buffer(s)
-            files = input('Enter file(s) to send: ')
-            files_to_send = files.split()
-        
-            for file_name in files_to_send:
+            sbuf = bufferTCP.Buffer(s)      
+            for file_name in archivos:
                 print(file_name)
                 sbuf.put_utf8(file_name)
         

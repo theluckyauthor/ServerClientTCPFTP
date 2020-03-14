@@ -39,11 +39,6 @@ s.send("Cliente: Hello server!".encode())
 with s:
     connbuf = bufferTCP.Buffer(s)
 while True:
-        hash_type = connbuf.get_utf8()
-        if not hash_type:
-            break
-        print('hash type: ', hash_type)
-
         file_name = connbuf.get_utf8()
         if not file_name:
             break
