@@ -7,7 +7,7 @@ import hashlib
 import bufferTCP
 
 HOST = ''
-PORT = 8002
+PORT = 8004
 
 newFile = ''
 archivos = []
@@ -68,7 +68,7 @@ print('Selected File to transfer: '+newFile)
 
 #PROTOCOLO
 #Creación del Socket: Puerto e IP
-port = 8002                  # Reserve a port for your service every new transfer wants a new port or you must wait.
+# Reserve a port for your service every new transfer wants a new port or you must wait.
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)             # Create a socket object
 host = socket.gethostname()   # Get local machine name
 s.bind((host, port))            # Bind to the port

@@ -21,7 +21,7 @@ logger.setLevel(logging.INFO)
 #Creación del Socket: Puerto e IP
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)             # Create a socket object
 host = '54.162.114.197'  #Ip address that the TCPServer  is there
-port = 8002                  # Reserve a port for your service every new transfer wants a new port or you must wait.
+port = 8004                  # Reserve a port for your service every new transfer wants a new port or you must wait.
 # If server and client run in same local directory,
 # need a separate place to store the uploads.
 try:
