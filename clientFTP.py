@@ -33,9 +33,11 @@ s.connect((host, port))
 
 #2. Enviar notificación de preparado para recibir datos de parte del servidor. 
 s.send("Cliente: Hello server!".encode())
-connbuf = bufferTCP.Buffer(s)
+
 #3. Recibir un archivo del servidor por medio de una comunicación a través de sockets TCP.
 #3.5 Recibir el Hash
+with s:
+    connbuf = bufferTCP.Buffer(s)
 while True:
         hash_type = connbuf.get_utf8()
         if not hash_type:
@@ -62,7 +64,7 @@ while True:
             if remaining:
                 print('File incomplete.  Missing',remaining,'bytes.')
             else:
-                print('File received successfully.')        
+                print('File received successfully.')       
 #4. Verificar la integridad del archivo con respeto a la información entregada por el servidor.
 #Calcular el nuevo Hash
 def getmd5file(archivo):

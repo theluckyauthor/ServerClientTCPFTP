@@ -7,7 +7,7 @@ import hashlib
 import bufferTCP
 
 HOST = ''
-PORT = 8004
+port = 8004
 
 newFile = ''
 archivos = []
