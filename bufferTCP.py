@@ -28,7 +28,7 @@ class Buffer:
            Return an empty string if the socket closes before receiving a null.
         '''
         while b'\x00' not in self.buffer:
-            data = self.sock.recv(1024)
+            data = self.sock.recv(8)
             if not data:
                 return ''
             self.buffer += data
