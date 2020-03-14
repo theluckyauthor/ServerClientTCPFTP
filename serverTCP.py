@@ -1,12 +1,17 @@
 #IMPORTS
+import socket
+import os
 import logging
-import socket                   # Import socket module
 import datetime
 import hashlib
-import os
 import bufferTCP
+
+HOST = ''
+PORT = 8002
+
 newFile = ''
 archivos = []
+
 #LOGGER
 #Create and configure logger 
 logging.basicConfig(filename="serverLogger"+ datetime.date.today().strftime("%B %d, %Y") + ".log", 
@@ -28,17 +33,6 @@ while True:
     elif selectedFile == '250':
         newFile = './archivos/archivo3.txt'
         break
-
-pool = 0
-while True:
-    selectedPool = int(input('Select number of people to send the file (Max 25): '))
-    if selectedPool > 0 and selectedPool < 26:
-        pool = selectedPool
-        break
-    
-print('Pool of '+ str(pool)+ ' clients')
-print('Selected File to transfer: '+newFile)
-
 #Calcular el Hash
 def getmd5file(archivo):
     try:
@@ -62,6 +56,16 @@ hashfile.close()
 archivos.append(newFile)
 archivos.append(nombreHash)
 
+pool = 0
+while True:
+    selectedPool = int(input('Select number of people to send the file (Max 25): '))
+    if selectedPool > 0 and selectedPool < 26:
+        pool = selectedPool
+        break
+    
+print('Pool of '+ str(pool)+ ' clients')
+print('Selected File to transfer: '+newFile)
+
 #PROTOCOLO
 #Creación del Socket: Puerto e IP
 port = 8002                  # Reserve a port for your service every new transfer wants a new port or you must wait.
@@ -84,21 +88,29 @@ while True:
     if poolCounter == pool:
         
 #4. Realizar la transferencia de archivos a los clientes definidos en la prueba. 
+        with s:
+            sbuf = bufferTCP.Buffer(s)
+            files = input('Enter file(s) to send: ')
+            files_to_send = files.split()
+        
+            for file_name in files_to_send:
+                print(file_name)
+                sbuf.put_utf8(file_name)
+        
+                file_size = os.path.getsize(file_name)
+                sbuf.put_utf8(str(file_size))
+        
+                with open(file_name, 'rb') as f:
+                    sbuf.put_bytes(f.read())
+                    print('File ' + file_name + ' Sent')
+
 #5. Definir el tamaño del buffer apropiado para su diseño. Realice diferentes pruebas para obtener el mejor desempeño en términos de tiempo de transmisión.
-        for file_name in archivos:
-            sbuf.put_utf8(file_name)
-            file_size = os.path.getsize(file_name)
-            sbuf.put_utf8(str(file_size))
-#In the same folder or path is this file running must the file you want to tranfser to be
-            with open(file_name, 'rb') as f:
-                sbuf.put_bytes(f.read())
-#4.5 Enviar el Hash
 #6. La aplicación debe permitir medir el tiempo de transferencia de un archivo en segundos.         
 #Al final de cada transferencia la aplicación debe reportar si el archivo está completo y
 #correcto y el tiempo total de transferencia, para esto genere un log para cada intercambio de
 #datos entre cliente y servidor. 
 #7. Disponer un repositorio de los archivos recibidos y logs. (Revisar sección de recomendaciones).
 
-            print('File ' + file_name + ' Sent')
+            
         # conn.send('Thank you for connecting'.encode())
         conn.close()

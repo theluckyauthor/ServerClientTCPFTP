@@ -22,7 +22,12 @@ logger.setLevel(logging.INFO)
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)             # Create a socket object
 host = '54.162.114.197'  #Ip address that the TCPServer  is there
 port = 8002                  # Reserve a port for your service every new transfer wants a new port or you must wait.
-
+# If server and client run in same local directory,
+# need a separate place to store the uploads.
+try:
+    os.mkdir('downloads')
+except FileExistsError:
+    pass
 #1. Conectarse al servidor TCP y mostrar que se ha realizado dicha conexión. Mostrar el estado de la conexión. 
 s.connect((host, port))
 
@@ -30,33 +35,34 @@ s.connect((host, port))
 s.send("Cliente: Hello server!".encode())
 connbuf = bufferTCP.Buffer(s)
 #3. Recibir un archivo del servidor por medio de una comunicación a través de sockets TCP.
-while True: 
-    file_name = connbuf.get_utf8()
-    if not file_name:
-        break
-    file_name = os.path.join('uploads',file_name)
-    print('file name: ', file_name)
+#3.5 Recibir el Hash
+while True:
+        hash_type = connbuf.get_utf8()
+        if not hash_type:
+            break
+        print('hash type: ', hash_type)
 
-    file_size = int(connbuf.get_utf8())
-    print('file size: ', file_size )
-    with open(file_name, 'wb') as f:
-        remaining = file_size
-        while remaining:
-            chunk_size = 4096 if remaining >= 4096 else remaining
-            chunk = connbuf.get_bytes(chunk_size)
-            if not chunk:
-                break
-            f.write(chunk)
-            remaining -= len(chunk)
+        file_name = connbuf.get_utf8()
+        if not file_name:
+            break
+        file_name = os.path.join('uploads',file_name)
+        print('file name: ', file_name)
+
+        file_size = int(connbuf.get_utf8())
+        print('file size: ', file_size )
+
+        with open(file_name, 'wb') as f:
+            remaining = file_size
+            while remaining:
+                chunk_size = 4096 if remaining >= 4096 else remaining
+                chunk = connbuf.get_bytes(chunk_size)
+                if not chunk: break
+                f.write(chunk)
+                remaining -= len(chunk)
             if remaining:
                 print('File incomplete.  Missing',remaining,'bytes.')
             else:
-                print('File received successfully.')
-f.close()
-
-print('Client: Successfully get the file')
-#3.5 Recibir el Hash
-        
+                print('File received successfully.')        
 #4. Verificar la integridad del archivo con respeto a la información entregada por el servidor.
 #Calcular el nuevo Hash
 def getmd5file(archivo):

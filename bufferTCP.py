@@ -22,6 +22,7 @@ class Buffer:
 
     def put_bytes(self,data):
         self.sock.sendall(data)
+
     def get_utf8(self):
         '''Read a null-terminated UTF8 data string and decode it.
            Return an empty string if the socket closes before receiving a null.
@@ -39,3 +40,38 @@ class Buffer:
         if '\x00' in s:
             raise ValueError('string contains delimiter(null)')
         self.sock.sendall(s.encode() + b'\x00')
+With this class, your client and server become:
+
+client.py:
+
+import socket
+import threading
+import os
+
+import buffer
+
+HOST = '127.0.0.1'
+PORT = 2345
+
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+s.connect((HOST, PORT))
+
+with s:
+    sbuf = buffer.Buffer(s)
+
+    hash_type = input('Enter hash type: ')
+
+    files = input('Enter file(s) to send: ')
+    files_to_send = files.split()
+
+    for file_name in files_to_send:
+        print(file_name)
+        sbuf.put_utf8(hash_type)
+        sbuf.put_utf8(file_name)
+
+        file_size = os.path.getsize(file_name)
+        sbuf.put_utf8(str(file_size))
+
+        with open(file_name, 'rb') as f:
+            sbuf.put_bytes(f.read())
+        print('File Sent')
