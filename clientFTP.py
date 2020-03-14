@@ -17,8 +17,8 @@ logger.setLevel(logging.INFO)
 #PROTOCOLO
 #Creación del Socket: Puerto e IP
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)             # Create a socket object
-host = 'localhost'  #Ip address that the TCPServer  is there
-port = 8002                     # Reserve a port for your service every new transfer wants a new port or you must wait.
+host = '54.162.114.197'  #Ip address that the TCPServer  is there
+port = 8002                  # Reserve a port for your service every new transfer wants a new port or you must wait.
 
 #1. Conectarse al servidor TCP y mostrar que se ha realizado dicha conexión. Mostrar el estado de la conexión. 
 s.connect((host, port))
