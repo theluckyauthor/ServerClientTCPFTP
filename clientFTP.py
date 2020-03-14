@@ -36,8 +36,7 @@ s.send("Cliente: Hello server!".encode())
 
 #3. Recibir un archivo del servidor por medio de una comunicación a través de sockets TCP.
 #3.5 Recibir el Hash
-with s:
-    connbuf = bufferTCP.Buffer(s)
+connbuf = bufferTCP.Buffer(s)
 while True:
         file_name = connbuf.get_utf8()
         if not file_name:

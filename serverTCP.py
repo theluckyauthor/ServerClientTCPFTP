@@ -109,5 +109,5 @@ while True:
 #7. Disponer un repositorio de los archivos recibidos y logs. (Revisar sección de recomendaciones).
 
             
-        # conn.send('Thank you for connecting'.encode())
+# conn.send('Thank you for connecting'.encode())
         conn.close()
