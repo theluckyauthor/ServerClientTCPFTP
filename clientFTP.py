@@ -3,6 +3,9 @@ import socket                   # Import socket module
 import logging
 import datetime
 import hashlib
+import os
+import bufferTCP
+
 
 #LOGGER
 #Create and configure logger 
@@ -25,18 +28,30 @@ s.connect((host, port))
 
 #2. Enviar notificación de preparado para recibir datos de parte del servidor. 
 s.send("Cliente: Hello server!".encode())
+connbuf = bufferTCP.Buffer(s)
 #3. Recibir un archivo del servidor por medio de una comunicación a través de sockets TCP.
-with open('received_file', 'wb') as f:
-    print ('Cliente: file opened')
-    while True:
-        print('Cliente: receiving data from server')
-        data = s.recv(1024)
-        print('Servidor: data=%s', (data))
-        if not data:
-            break
-        # write data to a file
-        f.write(data)
+while True: 
+    file_name = connbuf.get_utf8()
+    if not file_name:
+        break
+    file_name = os.path.join('uploads',file_name)
+    print('file name: ', file_name)
 
+    file_size = int(connbuf.get_utf8())
+    print('file size: ', file_size )
+    with open(file_name, 'wb') as f:
+        remaining = file_size
+        while remaining:
+            chunk_size = 4096 if remaining >= 4096 else remaining
+            chunk = connbuf.get_bytes(chunk_size)
+            if not chunk:
+                break
+            f.write(chunk)
+            remaining -= len(chunk)
+            if remaining:
+                print('File incomplete.  Missing',remaining,'bytes.')
+            else:
+                print('File received successfully.')
 f.close()
 
 print('Client: Successfully get the file')
