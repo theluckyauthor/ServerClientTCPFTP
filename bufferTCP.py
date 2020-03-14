@@ -28,15 +28,15 @@ class Buffer:
            Return an empty string if the socket closes before receiving a null.
         '''
         while b'\x00' not in self.buffer:
-            data = self.sock.recv(1024)
+            data = self.sock.recv(8)
             if not data:
                 return ''
             self.buffer += data
         # split off the string from the buffer.
         data,_,self.buffer = self.buffer.partition(b'\x00')
-        return data
+        return data.decode()
 
     def put_utf8(self,s):
         if '\x00' in s:
             raise ValueError('string contains delimiter(null)')
-        self.sock.send(s + b'\x00')
+        self.sock.send(s.encode() + b'\x00')
