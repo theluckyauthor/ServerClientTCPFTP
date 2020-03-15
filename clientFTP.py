@@ -4,7 +4,6 @@ import logging
 import datetime
 import hashlib
 import os
-import bufferTCP
 
 
 #LOGGER
@@ -36,29 +35,25 @@ s.send("Cliente: Hello server!".encode())
 
 #3. Recibir un archivo del servidor por medio de una comunicación a través de sockets TCP.
 #3.5 Recibir el Hash
-connbuf = bufferTCP.Buffer(s)
 while True:
-        file_name = connbuf.get_utf8()
-        if not file_name:
-            break
-        file_name = os.path.join('uploads',file_name)
-        print('file name: ', file_name)
+    size = s.recv(16) # Note that you limit your filename length to 255 bytes.
+    if not size:
+        break
+    size = int(size, 2)
+    filename = s.recv(size)
+    filesize = s.recv(32)
+    filesize = int(filesize, 2)
+    file_to_write = open(filename, 'wb')
+    chunksize = 4096
+    while filesize > 0:
+        if filesize < chunksize:
+            chunksize = filesize
+        data = s.recv(chunksize)
+        file_to_write.write(data)
+        filesize -= len(data)
 
-        file_size = int(connbuf.get_utf8())
-        print('file size: ', file_size )
-
-        with open(file_name, 'wb') as f:
-            remaining = file_size
-            while remaining:
-                chunk_size = 4096 if remaining >= 4096 else remaining
-                chunk = connbuf.get_bytes(chunk_size)
-                if not chunk: break
-                f.write(chunk)
-                remaining -= len(chunk)
-            if remaining:
-                print('File incomplete.  Missing',remaining,'bytes.')
-            else:
-                print('File received successfully.')       
+    file_to_write.close()
+    print( 'File received successfully')    
 #4. Verificar la integridad del archivo con respeto a la información entregada por el servidor.
 #Calcular el nuevo Hash
 def getmd5file(archivo):

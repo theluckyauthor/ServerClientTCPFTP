@@ -4,14 +4,12 @@ import os
 import logging
 import datetime
 import hashlib
-import bufferTCP
 
 HOST = ''
 port = 8004
 
 newFile = ''
-archivos = []
-
+directory = ''
 #LOGGER
 #Create and configure logger 
 logging.basicConfig(filename="serverLogger"+ datetime.date.today().strftime("%B %d, %Y") + ".log", 
@@ -28,10 +26,12 @@ while True:
 #3. La aplicación debe permitir seleccionar qué archivo desea enviarse a los clientes conectados y a cuántos clientes en simultáneo. 
     selectedFile = input('Select a file size (100 or 250): ')
     if selectedFile == '100':
-        newFile = './archivos/archivo1.txt'
+        newFile = './archivos/100/archivo100.txt'
+        directory = './archivos/100/'
         break
     elif selectedFile == '250':
-        newFile = './archivos/archivo3.txt'
+        newFile = './archivos/250/archivo250.txt'
+        directory = './archivos/250/'
         break
 #Calcular el Hash
 def getmd5file(archivo):
@@ -49,12 +49,10 @@ def getmd5file(archivo):
         return ""
 hashCalculado = getmd5file(newFile)
 nombreHash = "hash"+ selectedFile +".txt"
-hashfile = open(nombreHash,"w+")
+hashfile = open(ruta + nombreHash,"w+")
 if os.stat(nombreHash).st_size == 0:
     hashfile.write(hashCalculado)
 hashfile.close()
-archivos.append(newFile)
-archivos.append(nombreHash)
 
 pool = 0
 while True:
@@ -79,8 +77,7 @@ print ('Server: listening....')
 poolCounter = 0
 while True:
 #1. Recibir conexiones TCP. La aplicación debe soportar 25 conexiones en simultáneo.     
-    conn, addr = s.accept()     # Establish connection with client.
-    sbuf = bufferTCP.Buffer(conn)
+    server, addr = s.accept()     # Establish connection with client.
     poolCounter = poolCounter+1
     print ('Server: Got connection from', addr)
     print ('Server: There are '+str(poolCounter)+ ' client(s) connected')
@@ -88,18 +85,25 @@ while True:
     if poolCounter == pool:
         
 #4. Realizar la transferencia de archivos a los clientes definidos en la prueba. 
-        with s:
-            sbuf = bufferTCP.Buffer(s)      
-            for file_name in archivos:
-                print(file_name)
-                sbuf.put_utf8(file_name)
-        
-                file_size = os.path.getsize(file_name)
-                sbuf.put_utf8(str(file_size))
-        
-                with open(file_name, 'rb') as f:
-                    sbuf.put_bytes(f.read())
-                    print('File ' + file_name + ' Sent')
+        for files in directory:
+            print files
+            filename = files
+            size = len(filename)
+            size = bin(size)[2:].zfill(16) # encode filename size as 16 bit binary
+            s.send(size)
+            s.send(filename)
+
+            filename = os.path.join(path,filename)
+            filesize = os.path.getsize(filename)
+            filesize = bin(filesize)[2:].zfill(32) # encode filesize as 32 bit binary
+            s.send(filesize)
+
+            file_to_send = open(filename, 'rb')
+
+            l = file_to_send.read()
+            s.sendall(l)
+            file_to_send.close()
+            print 'File Sent'
 
 #5. Definir el tamaño del buffer apropiado para su diseño. Realice diferentes pruebas para obtener el mejor desempeño en términos de tiempo de transmisión.
 #6. La aplicación debe permitir medir el tiempo de transferencia de un archivo en segundos.         
@@ -109,6 +113,5 @@ while True:
 #7. Disponer un repositorio de los archivos recibidos y logs. (Revisar sección de recomendaciones).
 
             
-# conn.send('Thank you for connecting'.encode())
-    conn.close()
+        server.close()
     
