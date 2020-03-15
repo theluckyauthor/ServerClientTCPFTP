@@ -36,12 +36,12 @@ s.send("Cliente: Hello server!".encode())
 #3. Recibir un archivo del servidor por medio de una comunicación a través de sockets TCP.
 #3.5 Recibir el Hash
 while True:
-    size = s.recv(16) # Note that you limit your filename length to 255 bytes.
+    size = s.recv(16).decode() # Note that you limit your filename length to 255 bytes.
     if not size:
         break
     size = int(size, 2)
-    filename = s.recv(size)
-    filesize = s.recv(32)
+    filename = s.recv(size).decode()
+    filesize = s.recv(32).decode()
     filesize = int(filesize, 2)
     file_to_write = open(filename, 'wb')
     chunksize = 4096
@@ -69,7 +69,7 @@ def getmd5file(archivo):
     except:
         print("Error desconocido")
         return ""
-hashCalculado = getmd5file(f)
+hashCalculado = getmd5file(file_to_write)
 print(hashCalculado)
 #5. Enviar notificación de recepción del archivo al servidor
 #6. La aplicación debe permitir medir el tiempo de transferencia de un archivo en segundos.         
