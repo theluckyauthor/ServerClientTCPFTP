@@ -9,7 +9,7 @@ HOST = ''
 port = 8004
 
 newFile = ''
-directory = ''
+path = ''
 #LOGGER
 #Create and configure logger 
 logging.basicConfig(filename="serverLogger"+ datetime.date.today().strftime("%B %d, %Y") + ".log", 
@@ -27,11 +27,11 @@ while True:
     selectedFile = input('Select a file size (100 or 250): ')
     if selectedFile == '100':
         newFile = './archivos/100/archivo100.txt'
-        directory = './archivos/100/'
+        path = './archivos/100/'
         break
     elif selectedFile == '250':
         newFile = './archivos/250/archivo250.txt'
-        directory = './archivos/250/'
+        path = './archivos/250/'
         break
 #Calcular el Hash
 def getmd5file(archivo):
@@ -85,8 +85,8 @@ while True:
     if poolCounter == pool:
         
 #4. Realizar la transferencia de archivos a los clientes definidos en la prueba. 
+        directory = os.listdir(path)
         for files in directory:
-            path = "downloads"
             print (files)
             filename = files
             size = len(filename)
@@ -99,7 +99,7 @@ while True:
             filesize = bin(filesize)[2:].zfill(32) # encode filesize as 32 bit binary
             server.send(filesize.encode())
 
-            file_to_send = open(filename, 'w+')
+            file_to_send = open(filename, 'rb')
 
             l = file_to_send.read()
             server.sendall(l)
