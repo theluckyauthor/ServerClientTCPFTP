@@ -86,7 +86,7 @@ while True:
         
 #4. Realizar la transferencia de archivos a los clientes definidos en la prueba. 
         for files in directory:
-            print files
+            print (files)
             filename = files
             size = len(filename)
             size = bin(size)[2:].zfill(16) # encode filename size as 16 bit binary
@@ -103,7 +103,7 @@ while True:
             l = file_to_send.read()
             s.sendall(l)
             file_to_send.close()
-            print 'File Sent'
+            print( 'File Sent')
 
 #5. Definir el tamaño del buffer apropiado para su diseño. Realice diferentes pruebas para obtener el mejor desempeño en términos de tiempo de transmisión.
 #6. La aplicación debe permitir medir el tiempo de transferencia de un archivo en segundos.         
