@@ -86,7 +86,7 @@ while True:
         
 #4. Realizar la transferencia de archivos a los clientes definidos en la prueba. 
         for files in directory:
-            path = "downloads"
+            #path = "downloads"
             print (files)
             filename = files
             size = len(filename)
@@ -94,7 +94,7 @@ while True:
             server.send(size.encode())
             server.send(filename.encode())
 
-            filename = os.path.join(path,filename)
+            #filename = os.path.join(path,filename)
             filesize = os.path.getsize(filename)
             filesize = bin(filesize)[2:].zfill(32) # encode filesize as 32 bit binary
             server.send(filesize.encode())
