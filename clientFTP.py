@@ -25,28 +25,7 @@ print( 'me conecto')
 #2. Enviar notificación de preparado para recibir datos de parte del servidor. 
 s.send("Cliente: Hello server!".encode())
 print( 'Hello') 
-#3. Recibir un archivo del servidor por medio de una comunicación a través de sockets TCP.
-#3.5 Recibir el Hash
-for i in range(2):
-    size = s.recv(16).decode() # Note that you limit your filename length to 255 bytes.
-    if not size:
-        break
-    size = int(size, 2)
-    filename = s.recv(size).decode()
-    filesize = s.recv(32).decode()
-    filesize = int(filesize, 2)
-    file_to_write = open(filename, 'w+')
-    chunksize = 4096
-    while filesize > 0:
-        if filesize < chunksize:
-            chunksize = filesize
-        data = s.recv(chunksize)
-        file_to_write.write(data.decode())
-        filesize -= len(data)
-
-    file_to_write.close()
-    print( 'File' + filename +' received successfully')    
-#4. Verificar la integridad del archivo con respeto a la información entregada por el servidor.
+hashCalculado = ''
 #Calcular el nuevo Hash
 def getmd5file(archivo):
     try:
@@ -61,8 +40,33 @@ def getmd5file(archivo):
     except:
         print("Error desconocido")
         return ""
-hashCalculado = getmd5file(file_to_write)
+#3. Recibir un archivo del servidor por medio de una comunicación a través de sockets TCP.
+#3.5 Recibir el Hash
+for i in range(2):
+    size = s.recv(16).decode() # Note that you limit your filename length to 255 bytes.
+    if not size:
+        break
+    size = int(size, 2)
+    filename = s.recv(size).decode()
+    filesize = s.recv(32).decode()
+    filesize = int(filesize, 2)
+    file_to_write = open('./downloads/'+ filename, 'w+')
+    chunksize = 4096
+    while filesize > 0:
+        if filesize < chunksize:
+            chunksize = filesize
+        data = s.recv(chunksize)
+        file_to_write.write(data.decode())
+        filesize -= len(data)    
+    file_to_write.close()
+    if('archivo'in filename):
+        hashCalculado = getmd5file(filename)
+    else:
+        print(file_to_write.read())
+    print( 'File' + filename +' received successfully')    
+#4. Verificar la integridad del archivo con respeto a la información entregada por el servidor.
 print(hashCalculado)
+print ()
 #5. Enviar notificación de recepción del archivo al servidor
 #6. La aplicación debe permitir medir el tiempo de transferencia de un archivo en segundos.         
 #Al final de cada transferencia la aplicación debe reportar si el archivo está completo y
