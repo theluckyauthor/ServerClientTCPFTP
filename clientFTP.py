@@ -41,7 +41,7 @@ while True:
         if filesize < chunksize:
             chunksize = filesize
         data = s.recv(chunksize)
-        file_to_write.write(data)
+        file_to_write.write(data.decode())
         filesize -= len(data)
 
     file_to_write.close()
