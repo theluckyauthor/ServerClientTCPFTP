@@ -45,8 +45,7 @@ while True:
         filesize -= len(data)
 
     file_to_write.close()
-    print( 'File' + filename +' received successfully')
-    break    
+    print( 'File' + filename +' received successfully')    
 #4. Verificar la integridad del archivo con respeto a la información entregada por el servidor.
 #Calcular el nuevo Hash
 def getmd5file(archivo):

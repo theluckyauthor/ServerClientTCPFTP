@@ -50,7 +50,8 @@ def getmd5file(archivo):
 hashCalculado = getmd5file(newFile)
 nombreHash = "hash"+ selectedFile +".txt"
 hashfile = open((path + nombreHash),"w+")
-hashfile.write(hashCalculado)
+if os.stat(nombreHash).st_size == 0:
+    hashfile.write(hashCalculado)
 hashfile.close()
 
 pool = 0
