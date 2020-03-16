@@ -6,7 +6,7 @@ import datetime
 import hashlib
 
 HOST = ''
-port = 8005
+port = 8007
 
 newFile = ''
 path = ''
@@ -106,7 +106,7 @@ while True:
             file_to_send.close()
             print( 'File Sent')
 
-#5. Definir el tamaño del buffer apropiado para su diseño. Realice diferentes pruebas para obtener el mejor desempeño en términos de tiempo de transmisión.
+
 #6. La aplicación debe permitir medir el tiempo de transferencia de un archivo en segundos.         
 #Al final de cada transferencia la aplicación debe reportar si el archivo está completo y
 #correcto y el tiempo total de transferencia, para esto genere un log para cada intercambio de

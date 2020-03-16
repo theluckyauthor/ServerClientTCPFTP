@@ -18,7 +18,7 @@ logger.setLevel(logging.INFO)
 #Creación del Socket: Puerto e IP
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)             # Create a socket object
 host = '54.162.114.197'  #Ip address that the TCPServer  is there
-port = 8005                  # Reserve a port for your service every new transfer wants a new port or you must wait.
+port = 8007                  # Reserve a port for your service every new transfer wants a new port or you must wait.
 #1. Conectarse al servidor TCP y mostrar que se ha realizado dicha conexión. Mostrar el estado de la conexión. 
 s.connect((host, port))
 print( 'me conecto') 
@@ -26,6 +26,7 @@ print( 'me conecto')
 s.send("Cliente: Hello server!".encode())
 print( 'Hello') 
 hashCalculado = ''
+hashRecibido = ''
 #Calcular el nuevo Hash
 def getmd5file(archivo):
     try:
@@ -62,12 +63,18 @@ for i in range(2):
     if('archivo'in filename):
         hashCalculado = getmd5file(filename)
     else:
-        print(file_to_write.read())
+        hashRecibido = file_to_write.read()
     print( 'File' + filename +' received successfully')    
 #4. Verificar la integridad del archivo con respeto a la información entregada por el servidor.
-print(hashCalculado)
-print ()
+print('Hash Calculado' + hashCalculado)
+print('Hash Recibido' + hashRecibido)
+if hashCalculado == hashRecibido:
+    print('Los Hash Coinciden: Archivo recibido correctamente')
+else:
+    print ('Los Hash no Coinciden: Archivo recibido incorrectamente')
+    
 #5. Enviar notificación de recepción del archivo al servidor
+s.send("Cliente: Recibí el archivo!".encode())
 #6. La aplicación debe permitir medir el tiempo de transferencia de un archivo en segundos.         
 #Al final de cada transferencia la aplicación debe reportar si el archivo está completo y
 #correcto y el tiempo total de transferencia, para esto genere un log para cada intercambio de
