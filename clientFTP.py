@@ -27,7 +27,7 @@ s.send("Cliente: Hello server!".encode())
 print( 'Hello') 
 #3. Recibir un archivo del servidor por medio de una comunicación a través de sockets TCP.
 #3.5 Recibir el Hash
-while True:
+for i in range(2):
     size = s.recv(16).decode() # Note that you limit your filename length to 255 bytes.
     if not size:
         break
