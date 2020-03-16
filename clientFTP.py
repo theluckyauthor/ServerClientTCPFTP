@@ -59,12 +59,13 @@ for i in range(2):
         data = s.recv(chunksize)
         file_to_write.write(data.decode())
         filesize -= len(data)    
-    file_to_write.close()
+    
     if('archivo'in filename):
         hashCalculado = getmd5file(filename)
     else:
         hashRecibido = file_to_write.read()
-    print( 'File' + filename +' received successfully')    
+    print( 'File' + filename +' received successfully')
+    file_to_write.close()
 #4. Verificar la integridad del archivo con respeto a la información entregada por el servidor.
 print('Hash Calculado' + hashCalculado)
 print('Hash Recibido' + hashRecibido)
