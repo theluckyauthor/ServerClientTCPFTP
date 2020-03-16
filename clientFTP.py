@@ -3,8 +3,6 @@ import socket                   # Import socket module
 import logging
 import datetime
 import hashlib
-import os
-
 
 #LOGGER
 #Create and configure logger 
@@ -21,18 +19,12 @@ logger.setLevel(logging.INFO)
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)             # Create a socket object
 host = '54.162.114.197'  #Ip address that the TCPServer  is there
 port = 8004                  # Reserve a port for your service every new transfer wants a new port or you must wait.
-# If server and client run in same local directory,
-# need a separate place to store the uploads.
-try:
-    os.mkdir('downloads')
-except FileExistsError:
-    pass
 #1. Conectarse al servidor TCP y mostrar que se ha realizado dicha conexión. Mostrar el estado de la conexión. 
 s.connect((host, port))
-
+print( 'me conecto') 
 #2. Enviar notificación de preparado para recibir datos de parte del servidor. 
 s.send("Cliente: Hello server!".encode())
-
+print( 'Hello') 
 #3. Recibir un archivo del servidor por medio de una comunicación a través de sockets TCP.
 #3.5 Recibir el Hash
 while True:
@@ -43,7 +35,7 @@ while True:
     filename = s.recv(size).decode()
     filesize = s.recv(32).decode()
     filesize = int(filesize, 2)
-    file_to_write = open(filename, 'wb')
+    file_to_write = open(filename, 'w+')
     chunksize = 4096
     while filesize > 0:
         if filesize < chunksize:
@@ -53,7 +45,7 @@ while True:
         filesize -= len(data)
 
     file_to_write.close()
-    print( 'File received successfully')    
+    print( 'File' + filename +' received successfully')    
 #4. Verificar la integridad del archivo con respeto a la información entregada por el servidor.
 #Calcular el nuevo Hash
 def getmd5file(archivo):
