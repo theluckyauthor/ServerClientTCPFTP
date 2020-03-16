@@ -18,7 +18,7 @@ logger.setLevel(logging.INFO)
 #Creación del Socket: Puerto e IP
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)             # Create a socket object
 host = '54.162.114.197'  #Ip address that the TCPServer  is there
-port = 8007                  # Reserve a port for your service every new transfer wants a new port or you must wait.
+port = 8008                  # Reserve a port for your service every new transfer wants a new port or you must wait.
 #1. Conectarse al servidor TCP y mostrar que se ha realizado dicha conexión. Mostrar el estado de la conexión. 
 s.connect((host, port))
 print( 'me conecto') 
@@ -51,7 +51,7 @@ for i in range(2):
     filename = s.recv(size).decode()
     filesize = s.recv(32).decode()
     filesize = int(filesize, 2)
-    file_to_write = open('./downloads/'+ filename, 'w+')
+    file_to_write = open('./downloads/'+ filename, '')
     chunksize = 4096
     while filesize > 0:
         if filesize < chunksize:

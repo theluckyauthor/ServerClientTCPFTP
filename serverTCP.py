@@ -6,7 +6,7 @@ import datetime
 import hashlib
 
 HOST = ''
-port = 8007
+port = 8008
 
 newFile = ''
 path = ''
