@@ -114,6 +114,6 @@ while True:
 #7. Disponer un repositorio de los archivos recibidos y logs. (Revisar sección de recomendaciones).
 
             
-        server.close()
-    break
+        #server.close()
+  #  break
     
